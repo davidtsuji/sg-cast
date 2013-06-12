@@ -1,0 +1,19 @@
+{
+	"name": "sgCast",
+	"description": "Cast all sorts of JavaScript values to specific types",
+	"repo": "davidtsuji/sgCast",
+	"version": "0.0.1",
+	"main": "index.js",
+	"scripts": [
+
+		"index.js"
+
+	],
+	"dependencies": {
+
+		"davidtsuji/underscore": "*",
+		"davidtsuji/sgArgumentsToString": "*",
+		"component/moment": "*"
+
+	}
+}

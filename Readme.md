@@ -1,0 +1,1 @@
+Cast all sorts of JavaScript values to specific types
