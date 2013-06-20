@@ -15,7 +15,7 @@ window.sg.cast = _.memoize(function(_value, _castType, _default, _values, _addit
 
 	try { valueType = _value.constructor } catch(e){}
 
-	if (valueType === _castType) {
+	if (valueType === _castType || _castType === '*') {
 
 		value = _value;
 

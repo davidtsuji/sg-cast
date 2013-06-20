@@ -19,8 +19,6 @@ test('sg.cast() test', function() {
 	  , myObject = {a: 'a'}
 	  , myDate = new Date()
 
-
-
 	ok( sg.cast(myArray,   Array)   === myArray,   "myArray"   );
 	ok( sg.cast(myBoolean, Boolean) === myBoolean, "myBoolean" );
 	ok( sg.cast(myString,  String)  === myString,  "myString"  );
@@ -62,7 +60,7 @@ test('sg.cast() test', function() {
 	ok( sg.cast('1',       Number, 0) === 1,  "cast a String as a Number" );
 	ok( sg.cast('-11.5',   Number, 0) === -11.5,  "cast a String as a Number" );
 	ok( sg.cast('+11.5',   Number, 0) === 11.5,  "cast a String as a Number" );
-	ok( sg.cast('a1+11.5',  Number) === undefined,  "cast a String as a Number" );
+	ok( sg.cast('a1+11.5', Number) === undefined,  "cast a String as a Number" );
 
 
 	// # Object
@@ -73,6 +71,15 @@ test('sg.cast() test', function() {
 	// # String
 	// Cast from different types
 	ok( sg.cast(12, String) === '12', "cast a String as an Object" );
-	ok( sg.cast({a:'a'}, String) === '{"a":"a"}', "cast a String as an Object" );
+	ok( sg.cast({a:'a'}, String) === '{"a":"a"}', "cast a String as an Object" );	// # String
+	
+
+	// Cast from anything to a dynamic type
+	ok( sg.cast([1,2,3], '*')[1] === 2, "cast a number as a dynamic type" );
+	ok( sg.cast(false, '*') === false, "cast a boolean as a dynamic type" );
+	ok( sg.cast('bam', '*') === 'bam', "cast a string as a dynamic type" );
+	ok( sg.cast(12, '*') === 12, "cast a number as a dynamic type" );
+	ok( JSON.stringify(sg.cast({a:'a', b:{c:'c'}}, '*')) === '{"a":"a","b":{"c":"c"}}', "cast a object as a dynamic type" );
+	ok( sg.cast(new Date().getFullYear(), '*') === 2013, "cast a date as a dynamic type" );
 
 });
