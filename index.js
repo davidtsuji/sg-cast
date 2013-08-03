@@ -1,17 +1,13 @@
-require('sgArgumentsToString');
-require('moment');
+var argsToString = require('sg-arguments-to-string')
+  , memoize = require('memoize')
+  , contains = require('contains')
 
-var _ = require('underscore')
+var cast = memoize(function(_value, _castType, _default, _values, _additionalProperties) {
 
-window.sg = window['sg'] || {};
-
-window.sg.cast = _.memoize(function(_value, _castType, _default, _values, _additionalProperties) {
-
-	var $this = this
-	  , parsedValue
+	var parsedValue
 	  , valueType
 	  , value
-	  , values = _.isArray(_values) ? _values : [];
+	  , values = type(_values) == 'array' ? _values : [];
 
 	try { valueType = _value.constructor } catch(e){}
 
@@ -23,7 +19,7 @@ window.sg.cast = _.memoize(function(_value, _castType, _default, _values, _addit
 
 		switch(true) {
 
-			case _castType == Array && ! _.isNull(_value) && ! _.isUndefined(_value):
+			case _castType == Array && ! type(_value) == 'null' && ! type(_value) == 'undefined':
 
 				value = [_value];
 
@@ -37,7 +33,7 @@ window.sg.cast = _.memoize(function(_value, _castType, _default, _values, _addit
 
 				}catch(e) {}
 
-				value = _.isBoolean(value) ? value : ( ! _.isUndefined(_default) && ! _.isNull(_default) ? _default : false )
+				value = type(value) == 'boolean' ? value : ( ! type(_default) == 'undefined' && ! type(_default) == 'null' ? _default : false )
 
 			break;
 
@@ -52,24 +48,24 @@ window.sg.cast = _.memoize(function(_value, _castType, _default, _values, _addit
 
 			break;
 
-			case _castType == 'Moment':
+			// case _castType == 'Moment':
 			
-				value = moment(_value);
+			// 	value = moment(_value);
 
-				if (value && value.isValid() && _.isObject(_additionalProperties) && _.has(_additionalProperties, '_dateFormat')) {
+			// 	if (value && value.isValid() && _.isObject(_additionalProperties) && _.has(_additionalProperties, '_dateFormat')) {
 
-					value = value.format(_additionalProperties._dateFormat);
+			// 		value = value.format(_additionalProperties._dateFormat);
 
-				}
+			// 	}
 
-			break;
+			// break;
 			
 			case _castType == String:
 
 				try {
 
 					value = JSON.stringify(_value);
-					if ( _.isUndefined(value) ) throw '';
+					if ( type(value) == 'undefined' ) throw '';
 
 				} catch(e) {
 
@@ -92,7 +88,7 @@ window.sg.cast = _.memoize(function(_value, _castType, _default, _values, _addit
 
 			default:
 
-				try { value = $this.cast(JSON.parse(_value), _castType) } catch(e) {}
+				try { value = cast(JSON.parse(_value), _castType) } catch(e) {}
 
 			break;
 
@@ -100,8 +96,10 @@ window.sg.cast = _.memoize(function(_value, _castType, _default, _values, _addit
 
 	}
 
-	if (values.length > 0 && ! _.contains(values, value)) value = values[0];
+	if (values.length > 0 && ! contains(values, value)) value = values[0];
 
-	return _.isUndefined(value) || _.isNull(value) || value == 'null' ? _default : value;
+	return type(value) == 'undefined' || type(value) == 'null' ? _default : value;
 
-}, sg.argumentsToString);
+}, argsToString);
+
+module.exports = cast;
