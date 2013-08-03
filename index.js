@@ -1,6 +1,7 @@
 var argsToString = require('sg-arguments-to-string')
   , memoize = require('memoize')
   , contains = require('contains')
+  , type = require('type')
 
 var cast = memoize(function(_value, _castType, _default, _values, _additionalProperties) {
 
