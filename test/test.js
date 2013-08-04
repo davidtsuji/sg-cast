@@ -18,6 +18,10 @@ test('cast() test', function() {
 	ok( cast(myObject,  Object)  === myObject,  "myObject"  );
 	ok( cast(myDate,    Date)    === myDate,    "myDate"    );
 
+	// # Defaults
+	ok( cast(null, String, 'orange') === 'orange', 'bad value, no values, use the default' )
+	ok( cast(null, String, null, ['red', 'green', 'blue']) === 'red', 'bad value, no values, use the default' )
+	ok( cast(null, String, 'orange', ['red', 'green', 'blue']) === 'red', 'bad value, no values, use the default' )
 
 	// # Array
 	// Cast from different types

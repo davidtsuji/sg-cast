@@ -11,6 +11,8 @@
 		"component/type": "*",
 		"davidtsuji/contains": "*",
 		"davidtsuji/memoize": "*",
-		"davidtsuji/sg-arguments-to-string": "*"
+		"davidtsuji/sg-arguments-to-string": "*",
+		"davidtsuji/sg-is-empty": "*",
+		"moment/moment": "*"
 	}
 }

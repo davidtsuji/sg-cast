@@ -1,7 +1,10 @@
+if ( ! window['moment']) require('moment');
+
 var argsToString = require('sg-arguments-to-string')
   , memoize = require('memoize')
   , contains = require('contains')
   , type = require('type')
+  , isEmpty = require('sg-is-empty')
 
 var cast = memoize(function(_value, _castType, _default, _values, _additionalProperties) {
 
@@ -20,7 +23,7 @@ var cast = memoize(function(_value, _castType, _default, _values, _additionalPro
 
 		switch(true) {
 
-			case _castType == Array && ! type(_value) == 'null' && ! type(_value) == 'undefined':
+			case _castType == Array && ! isEmpty(_value):
 
 				value = [_value];
 
@@ -49,28 +52,32 @@ var cast = memoize(function(_value, _castType, _default, _values, _additionalPro
 
 			break;
 
-			// case _castType == 'Moment':
+			case _castType == 'Moment':
 			
-			// 	value = moment(_value);
+				value = moment(_value);
 
-			// 	if (value && value.isValid() && _.isObject(_additionalProperties) && _.has(_additionalProperties, '_dateFormat')) {
+				if (value && value.isValid() && type(_additionalProperties) == 'object' && contains(Object.keys(_additionalProperties), '_dateFormat')) {
 
-			// 		value = value.format(_additionalProperties._dateFormat);
+					value = value.format(_additionalProperties._dateFormat);
 
-			// 	}
+				}
 
-			// break;
+			break;
 			
 			case _castType == String:
 
-				try {
+				if ( ! isEmpty(_value)) {
 
-					value = JSON.stringify(_value);
-					if ( type(value) == 'undefined' ) throw '';
+					try {
 
-				} catch(e) {
+						value = JSON.stringify(_value);
+						if ( type(value) == 'undefined' ) throw '';
 
-					try { value = _value.toString() } catch(e){}
+					} catch(e) {
+
+						try { value = _value.toString() } catch(e){}
+
+					}
 
 				}
 
